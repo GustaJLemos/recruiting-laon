@@ -11,5 +11,10 @@ export const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 20,
     paddingBottom: 36
+  },
+  form: { 
+    gap: 12, 
+    marginTop: 32, 
+    marginBottom: 12 
   }
 });
