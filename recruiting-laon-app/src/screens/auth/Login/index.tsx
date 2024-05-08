@@ -7,14 +7,62 @@ import { Button } from "../../../components/Button";
 import { TextButton } from "../../../components/TextButton";
 import { useNavigation } from "@react-navigation/native";
 import { AuthRoutesProps } from "../../../routes/auth.routes";
-import { Input } from "../../../components/Input";
+import { ControlledInput } from "../../../components/ControlledInput";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "../../../hooks/useToast";
+import { useTranslation } from "react-i18next";
+
+type FormProps = {
+  name: string;
+  email: string;
+  password: string;
+};
 
 export function Login() {
+  const { t } = useTranslation();
+
+  const schema = z.object({
+    name: z.string({ required_error: t("Commons:validation:required") }),
+    email: z
+      .string({ required_error: t("Commons:validation:required") })
+      .email(t("Commons:validation:email")),
+    password: z.string({ required_error: t("Commons:validation:required") }),
+  });
+
+  const { showToast } = useToast();
+
   const { navigate } = useNavigation<AuthRoutesProps>();
 
-  function handleRegister() {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<FormProps>({
+    resolver: zodResolver(schema),
+  });
+
+  function handleRegister({ name, email, password }: FormProps) {
+    if (password.includes(" ")) {
+      setError("password", {
+        message: t("Commons:validation:passwordWhiteSpace"),
+      });
+      return;
+    }
+
     try {
-    } catch (error) {}
+      showToast({
+        type: "success",
+        title: t("LoginScreen:toast:success"),
+      });
+    } catch (error) {
+      showToast({
+        type: "error",
+        title: t("LoginScreen:toast:error"),
+      });
+    }
   }
 
   return (
@@ -23,31 +71,53 @@ export function Login() {
 
       <View style={styles.content}>
         <Text textType="semibold_24" color={ColorTheme.white}>
-          Cadastre-se
+          {t("LoginScreen:title")}
         </Text>
-        <Text textType="regular_16">
-          Acompanhe os melhores filmes e séries.
-        </Text>
+        <Text textType="regular_16">{t("LoginScreen:subtitle")}</Text>
 
-        <View style={{ gap: 12, marginTop: 32, marginBottom: 12 }}>
-          <Input placeholder="Nome completo" />
-          <Input placeholder="Email" keyboardType="email-address" />
-          <Input placeholder="Senha" passwordInput />
+        <View style={styles.form}>
+          <ControlledInput
+            name="name"
+            control={control}
+            placeholder={t("LoginScreen:placeholderInput:name")}
+            maxLength={255}
+            error={!!errors.name}
+            hintError={errors.name?.message}
+          />
+          <ControlledInput
+            name="email"
+            control={control}
+            placeholder={t("LoginScreen:placeholderInput:email")}
+            keyboardType="email-address"
+            maxLength={255}
+            error={!!errors.email}
+            hintError={errors.email?.message}
+          />
+          <ControlledInput
+            name="password"
+            control={control}
+            placeholder={t("LoginScreen:placeholderInput:password")}
+            passwordInput
+            maxLength={50}
+            error={!!errors.password}
+            hintError={errors.password?.message}
+          />
         </View>
 
         <View style={{ gap: 24 }}>
           <Text textType="regular_12" color={ColorTheme.white}>
-            Ao clicar em{" "}
-            <Text textType="regular_12" style={{ fontWeight: "bold" }}>
-              cadastrar
-            </Text>
-            , você está aceitando os Termos e Condições e a Política de
-            Privacidade da Laon.
+            {t("LoginScreen:warningText")}
           </Text>
 
-          <Button onPress={() => handleRegister} title="Cadastrar" />
+          <Button
+            onPress={handleSubmit(handleRegister)}
+            title={t("Commons:register")}
+          />
 
-          <TextButton title="Entrar" onPress={() => navigate("LoginScreen")} />
+          <TextButton
+            title={t("Commons:enter")}
+            onPress={() => navigate("LoginScreen")}
+          />
         </View>
       </View>
     </View>
