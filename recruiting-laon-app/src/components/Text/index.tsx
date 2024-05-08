@@ -30,6 +30,7 @@ export function Text({
 
   return (
     <RNText
+      maxFontSizeMultiplier={1.2}
       {...rest}
       style={[
         { color: error ? ColorTheme.feedback.negative : color },
