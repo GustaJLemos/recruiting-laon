@@ -21,8 +21,8 @@ export function AuthRoutes() {
         headerShown: false,
       }}
     >
-      <Stack.Screen name="LoginScreen" component={Login} />
       <Stack.Screen name="RegisterScreen" component={Register} />
+      <Stack.Screen name="LoginScreen" component={Login} />
     </Stack.Navigator>
   );
 }
