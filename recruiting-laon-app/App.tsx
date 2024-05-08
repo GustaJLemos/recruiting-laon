@@ -7,8 +7,26 @@ import {
 import { Loading } from "./src/components/Loading";
 import { Routes } from "./src/routes";
 import { ColorTheme } from "./src/theme/ColorTheme";
+import Toast from "react-native-toast-message";
+import { toastConfig } from "./src/hooks/useToast";
+import i18next from "i18next";
+import { initReactI18next } from "react-i18next";
+import { translations } from "./src/translations";
+import "intl-pluralrules";
 
 export default function App() {
+  i18next.use(initReactI18next).init({
+    resources: {
+      ...translations,
+    },
+    lng: "ptbr",
+    fallbackLng: "ptbr",
+    debug: true,
+    interpolation: {
+      escapeValue: false,
+    },
+  });
+
   let [fontsLoaded] = useFonts({
     Inter_400Regular,
     Inter_600SemiBold,
@@ -25,6 +43,7 @@ export default function App() {
         backgroundColor={ColorTheme.gray.gray_200}
       />
       <Routes />
+      <Toast config={toastConfig} />
     </View>
   );
 }
