@@ -1,13 +1,13 @@
 import { CommonsTranslations } from "./CommonsTranslations";
-import { LoginScreenTranslations } from "./LoginScreenTranslations";
+import { RegisterScreenTranslations } from "./RegisterScreenTranslations";
 
 export type TranslationsType = {
   en: {
-    LoginScreen: LoginScreenTranslations;
+    RegisterScreen: RegisterScreenTranslations;
     Commons: CommonsTranslations;
   };
   ptbr: {
-    LoginScreen: LoginScreenTranslations;
+    RegisterScreen: RegisterScreenTranslations;
     Commons: CommonsTranslations;
   };
 };
