@@ -1,4 +1,4 @@
-type fontStylesTheme = {
+export type FontStylesTheme = {
   fontWeight:
     | '600'
     | '500'
@@ -18,12 +18,12 @@ type fontStylesTheme = {
 }
 
 export type FontsThemeType = {
-  semibold_40: fontStylesTheme,
-  semibold_24: fontStylesTheme,
-  semibold_16: fontStylesTheme,
-  regular_16: fontStylesTheme,
-  regular_12: fontStylesTheme,
-  semibold_12: fontStylesTheme,
+  semibold_40: FontStylesTheme,
+  semibold_24: FontStylesTheme,
+  semibold_16: FontStylesTheme,
+  regular_16: FontStylesTheme,
+  regular_12: FontStylesTheme,
+  semibold_12: FontStylesTheme,
 }
 
 export const FontsTheme: FontsThemeType = {
