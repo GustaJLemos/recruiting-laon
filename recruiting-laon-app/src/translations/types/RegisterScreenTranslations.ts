@@ -1,4 +1,4 @@
-export type LoginScreenTranslations = {
+export type RegisterScreenTranslations = {
   toast: {
     success: string;
     error: string;

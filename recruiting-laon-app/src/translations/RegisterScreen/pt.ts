@@ -1,6 +1,6 @@
-import { LoginScreenTranslations } from "../types/LoginScreenTranslations";
+import { RegisterScreenTranslations } from "../types/RegisterScreenTranslations";
 
-export const LoginScreenPt: LoginScreenTranslations = {
+export const RegisterScreenPt: RegisterScreenTranslations = {
   toast: {
     success: "Cadastro realizado! Aproveite o app.",
     error: "Não foi possível realizar seu cadastro. Revise os dados e tente novamente!",
