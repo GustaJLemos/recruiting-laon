@@ -2,7 +2,7 @@ import { RegisterScreenTranslations } from "../types/RegisterScreenTranslations"
 
 export const RegisterScreenPt: RegisterScreenTranslations = {
   toast: {
-    success: "Cadastro realizado! Aproveite o app.",
+    success: "Cadastro realizado!",
     error: "Não foi possível realizar seu cadastro. Revise os dados e tente novamente!",
   },
   title: "Cadastre-se",
