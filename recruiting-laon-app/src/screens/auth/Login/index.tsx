@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { userStore } from "../../../stores/userStore";
 import { authService } from "../../../services/authService";
+import { AppError } from "../../../utils/AppError";
 
 type FormProps = {
   email: string;
@@ -69,15 +70,19 @@ export function Login() {
 
       showToast({
         type: "success",
-        title: "Login efetuado!",
+        title: t("LoginScreen:toast:success"),
       });
     } catch (error) {
+      const errorMessage =
+        error instanceof AppError
+          ? error.message
+          : t("LoginScreen:toast:error");
+
       setLoading(false);
 
       showToast({
         type: "error",
-        title:
-          "Não foi possível efetuar o login. Revise os dados e tente novamente!",
+        title: errorMessage,
       });
     }
   }
@@ -88,15 +93,15 @@ export function Login() {
 
       <View style={styles.content}>
         <Text textType="semibold_24" color={ColorTheme.white}>
-          Entrar
+          {t("LoginScreen:title")}
         </Text>
-        <Text textType="regular_16">Bem vindo(a) de volta!</Text>
+        <Text textType="regular_16">{t("LoginScreen:subtitle")}</Text>
 
         <View style={styles.form}>
           <ControlledInput
             name="email"
             control={control}
-            placeholder="Email"
+            placeholder={t("LoginScreen:placeholderInput:email")}
             keyboardType="email-address"
             maxLength={255}
             error={!!errors.email}
@@ -105,7 +110,7 @@ export function Login() {
           <ControlledInput
             name="password"
             control={control}
-            placeholder="Senha"
+            placeholder={t("LoginScreen:placeholderInput:password")}
             passwordInput
             maxLength={50}
             error={!!errors.password}
@@ -116,12 +121,12 @@ export function Login() {
         <View style={{ gap: 24 }}>
           <Button
             onPress={handleSubmit(handleRegister)}
-            title="Entrar"
+            title={t("Commons:enter")}
             loading={loading}
           />
 
           <TextButton
-            title="Cadastrar"
+            title={t("Commons:register")}
             onPress={() => navigate("RegisterScreen")}
             disabled={loading}
           />
