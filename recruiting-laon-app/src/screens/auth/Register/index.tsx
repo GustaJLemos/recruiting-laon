@@ -47,7 +47,7 @@ export function Register() {
     resolver: zodResolver(schema),
   });
 
-  const signIn = userStore((store) => store.signIn);
+  const register = userStore((store) => store.register);
 
   const [loading, setLoading] = useState(false);
 
@@ -68,7 +68,7 @@ export function Register() {
         password,
       });
 
-      signIn(accessToken, refreshToken);
+      register(accessToken, refreshToken);
 
       showToast({
         type: "success",
