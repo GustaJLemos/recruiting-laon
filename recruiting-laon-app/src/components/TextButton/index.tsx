@@ -12,7 +12,12 @@ type Props = TouchableOpacityProps & {
 
 export function TextButton({ title, onPress, ...rest }: Props) {
   return (
-    <TouchableOpacity activeOpacity={0.8} {...rest} style={rest.style}>
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={0.8}
+      {...rest}
+      style={rest.style}
+    >
       <Text textType="semibold_16" color={ColorTheme.white} style={styles.text}>
         {title}
       </Text>
