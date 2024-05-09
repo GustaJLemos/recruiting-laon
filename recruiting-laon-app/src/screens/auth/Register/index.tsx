@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { userStore } from "../../../stores/userStore";
 import { authService } from "../../../services/authService";
+import { AppError } from "../../../utils/AppError";
 
 type FormProps = {
   name: string;
@@ -75,11 +76,16 @@ export function Register() {
         title: t("RegisterScreen:toast:success"),
       });
     } catch (error) {
+      const errorMessage =
+        error instanceof AppError
+          ? error.message
+          : t("RegisterScreen:toast:error");
+
       setLoading(false);
 
       showToast({
         type: "error",
-        title: t("RegisterScreen:toast:error"),
+        title: errorMessage,
       });
     }
   }
