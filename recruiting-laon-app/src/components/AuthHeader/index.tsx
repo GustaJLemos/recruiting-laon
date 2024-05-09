@@ -19,7 +19,7 @@ export function AuthHeader() {
           activeOpacity={0.8}
           style={styles.goBackButton}
         >
-          <MaterialIcons name="arrow-back" size={18} color={ColorTheme.white} />
+          <MaterialIcons name="arrow-back" size={16} color={ColorTheme.white} />
         </TouchableOpacity>
       ) : (
         <View></View>

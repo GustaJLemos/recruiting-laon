@@ -6,7 +6,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     
     paddingVertical: 20,
-    paddingHorizontal: 12,
+    paddingHorizontal: 20,
     
     borderBottomWidth: 1,
     borderBottomColor: ColorTheme.gray.gray_300,
@@ -18,8 +18,12 @@ export const styles = StyleSheet.create({
   goBackButton: {
     borderRadius: 50,
     borderWidth: 1,
-    
-    padding: 10,
+
+    width: 32,
+    height: 32,
+
+    alignItems: 'center',
+    justifyContent: 'center',
 
     borderColor: ColorTheme.gray.gray_400
   }
