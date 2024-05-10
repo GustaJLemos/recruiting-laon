@@ -1,6 +1,6 @@
 export type TVSeries = {
   backdrop_path: string,
-  first_air_date: string,
+  first_air_date: Date,
   genre_ids: number[],
   id: number,
   name: string,
