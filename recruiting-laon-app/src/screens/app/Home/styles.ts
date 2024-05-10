@@ -8,17 +8,25 @@ export const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   horizontalScroll: {
-    paddingTop: 36,
+    paddingLeft: 20, 
+    gap: 16, 
+    paddingRight: 20
   },
   horizontalScrollTitle: { 
     marginBottom: 12, 
+    marginTop: 36,
     marginLeft: 20 
   },
   popularContent: {
     marginTop: 40,
     gap: 24,
-  },
-  popularContentTexts: {
     paddingHorizontal: 20
+  },
+  filmsContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: 16,
+    paddingBottom: 40
   }
 });
