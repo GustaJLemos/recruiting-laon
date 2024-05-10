@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { ScrollView, View } from "react-native";
 
 import { styles } from "./styles";
-import { userStore } from "../../../stores/userStore";
 import { AppHeader } from "../../../components/AppHeader";
 import { Text } from "../../../components/Text";
 import { HorizontalFilmCard } from "../../../components/HorizontalFilmCard";
@@ -14,13 +13,25 @@ import { useToast } from "../../../hooks/useToast";
 import { AppError } from "../../../utils/AppError";
 import { sleep } from "../../../utils/sleep";
 import { TVSeries } from "../../../types/TVSeries";
+import { movieStore } from "../../../stores/movieStore";
+import { useNavigation } from "@react-navigation/native";
+import { AppRoutesProps } from "../../../routes/app.routes";
+import { useTranslation } from "react-i18next";
+import { userStore } from "../../../stores/userStore";
 
 const fakeData = [0, 1, 2, 3, 4, 5];
 
 export function Home() {
-  const signOut = userStore((store) => store.signOut);
+  const { t } = useTranslation();
 
   const { showToast } = useToast();
+
+  const { navigate } = useNavigation<AppRoutesProps>();
+
+  const { selectMovie, selectSerie, saveMoviesGenres, saveSeriesGenres } =
+    movieStore();
+
+  const userPreferedLanguage = userStore((store) => store.userPreferedLanguage);
 
   const [upComingMoviesLoading, setUpComingMoviesLoading] = useState(false);
   const [upComingMovies, setUpComingMovies] = useState<Movies[]>([]);
@@ -42,9 +53,7 @@ export function Home() {
       setPopularMovies(movies);
     } catch (error) {
       const errorMessage =
-        error instanceof AppError
-          ? error.message
-          : "Não foi possível buscar os filmes";
+        error instanceof AppError ? error.message : t("HomeScreen:toast:error");
 
       showToast({ type: "error", title: errorMessage });
     } finally {
@@ -63,9 +72,7 @@ export function Home() {
       setUpComingMovies(movies);
     } catch (error) {
       const errorMessage =
-        error instanceof AppError
-          ? error.message
-          : "Não foi possível buscar os filmes";
+        error instanceof AppError ? error.message : t("HomeScreen:toast:error");
 
       showToast({ type: "error", title: errorMessage });
     } finally {
@@ -84,9 +91,7 @@ export function Home() {
       setPopularSeries(series);
     } catch (error) {
       const errorMessage =
-        error instanceof AppError
-          ? error.message
-          : "Não foi possível buscar os filmes";
+        error instanceof AppError ? error.message : t("HomeScreen:toast:error");
 
       showToast({ type: "error", title: errorMessage });
     } finally {
@@ -94,11 +99,38 @@ export function Home() {
     }
   }
 
+  async function fetchSeriesAndMoviesGenres() {
+    try {
+      const series = await movieService.getTVSeriesGenres();
+      const movies = await movieService.getMoviesGenres();
+
+      console.log("movies", movies);
+      console.log("series", series);
+      saveMoviesGenres(movies);
+      saveSeriesGenres(series);
+    } catch (error) {
+      if (__DEV__) {
+        ("Não foi possível buscar os gêneros");
+      }
+    }
+  }
+
   useEffect(() => {
     fetchUpComingMovies();
     fetchPopularMovies();
     fetchPopularSeries();
-  }, []);
+    fetchSeriesAndMoviesGenres();
+  }, [userPreferedLanguage]);
+
+  function handleSelectMovie(movie: Movies) {
+    selectMovie(movie);
+    navigate("DetailsScreen");
+  }
+
+  function handleSelectSerie(series: TVSeries) {
+    selectSerie(series);
+    navigate("DetailsScreen");
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -109,7 +141,7 @@ export function Home() {
         color={ColorTheme.white}
         style={styles.horizontalScrollTitle}
       >
-        Em breve
+        {t("HomeScreen:upComing")}
       </Text>
       <ScrollView
         horizontal
@@ -120,25 +152,25 @@ export function Home() {
           ? fakeData.map((item) => (
               <View key={item.toString()} style={styles.horizontalShimmer} />
             ))
-          : upComingMovies.map(({ id, poster_path }) => (
+          : upComingMovies.map((item) => (
               <HorizontalFilmCard
-                key={id.toString()}
-                imgPath={poster_path}
-                onPress={() => {}}
+                key={item.id.toString() + item.title}
+                imgPath={item.poster_path}
+                onPress={() => handleSelectMovie(item)}
               />
             ))}
       </ScrollView>
 
       <View style={styles.popularContent}>
         <Text textType="semibold_24" color={ColorTheme.white}>
-          Populares
+          {t("HomeScreen:popular")}
         </Text>
         <Text
           textType="semibold_16"
           color={ColorTheme.gray.gray_500}
           style={{ textTransform: "uppercase" }}
         >
-          Filmes
+          {t("HomeScreen:movies")}
         </Text>
 
         <ScrollView
@@ -149,11 +181,11 @@ export function Home() {
             ? fakeData.map((item) => (
                 <View key={item.toString()} style={styles.popularShimmer} />
               ))
-            : popularMovies.map(({ id, poster_path }) => (
+            : popularMovies.map((item) => (
                 <VerticalFilmCard
-                  imgPath={poster_path}
-                  key={id.toString()}
-                  onPress={() => {}}
+                  imgPath={item.poster_path}
+                  key={item.toString() + item.title}
+                  onPress={() => handleSelectMovie(item)}
                 />
               ))}
         </ScrollView>
@@ -163,7 +195,7 @@ export function Home() {
           color={ColorTheme.gray.gray_500}
           style={{ textTransform: "uppercase" }}
         >
-          Séries
+          {t("HomeScreen:series")}
         </Text>
 
         <ScrollView
@@ -174,11 +206,11 @@ export function Home() {
             ? fakeData.map((item) => (
                 <View key={item.toString()} style={styles.popularShimmer} />
               ))
-            : popularSeries.map(({ id, poster_path }) => (
+            : popularSeries.map((item) => (
                 <VerticalFilmCard
-                  imgPath={poster_path}
-                  key={id.toString()}
-                  onPress={() => {}}
+                  imgPath={item.poster_path}
+                  key={item.id.toString() + item.name}
+                  onPress={() => handleSelectSerie(item)}
                 />
               ))}
         </ScrollView>
