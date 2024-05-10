@@ -1,16 +1,19 @@
 import React from "react";
 import { Image, TouchableOpacity, View } from "react-native";
-import RickPng from "../../assets/rick.png";
 import { styles } from "./styles";
 
 type Props = {
   onPress: () => void;
+  imgPath: string;
 };
 
-export function VerticalFilmCard({ onPress }: Props) {
+export function VerticalFilmCard({ onPress, imgPath }: Props) {
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
-      <Image source={RickPng} style={styles.container} />
+      <Image
+        source={{ uri: `https://image.tmdb.org/t/p/original/${imgPath}` }}
+        style={styles.container}
+      />
     </TouchableOpacity>
   );
 }
