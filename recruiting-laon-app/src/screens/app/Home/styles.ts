@@ -28,5 +28,17 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 16,
     paddingBottom: 40
+  },
+  horizontalShimmer: { 
+    width: 320, 
+    height: 220, 
+    backgroundColor: ColorTheme.gray.gray_300,
+    borderRadius: 4
+  },
+  popularShimmer: {
+    width: 160,
+    height: 234,
+    backgroundColor: ColorTheme.gray.gray_300,
+    borderRadius: 4
   }
 });

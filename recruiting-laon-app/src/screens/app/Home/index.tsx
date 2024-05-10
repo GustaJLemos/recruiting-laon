@@ -1,36 +1,103 @@
-import React, { useEffect } from "react";
-import { FlatList, ScrollView, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ScrollView, View } from "react-native";
 
 import { styles } from "./styles";
-import { Button } from "../../../components/Button";
-import { useNavigation } from "@react-navigation/native";
-import { AppRoutesProps } from "../../../routes/app.routes";
 import { userStore } from "../../../stores/userStore";
 import { AppHeader } from "../../../components/AppHeader";
 import { Text } from "../../../components/Text";
 import { HorizontalFilmCard } from "../../../components/HorizontalFilmCard";
 import { ColorTheme } from "../../../theme/ColorTheme";
 import { VerticalFilmCard } from "../../../components/VerticalFilmCard";
-import { api } from "../../../services/api";
+import { movieService } from "../../../services/movieService";
+import { Movies } from "../../../types/Movies";
+import { useToast } from "../../../hooks/useToast";
+import { AppError } from "../../../utils/AppError";
+import { sleep } from "../../../utils/sleep";
+import { TVSeries } from "../../../types/TVSeries";
 
 const fakeData = [0, 1, 2, 3, 4, 5];
 
 export function Home() {
   const signOut = userStore((store) => store.signOut);
 
-  async function fetchPopularFilms() {
+  const { showToast } = useToast();
+
+  const [upComingMoviesLoading, setUpComingMoviesLoading] = useState(false);
+  const [upComingMovies, setUpComingMovies] = useState<Movies[]>([]);
+
+  const [popularMoviesLoading, setPopularMoviesLoading] = useState(false);
+  const [popularMovies, setPopularMovies] = useState<Movies[]>([]);
+
+  const [popularSeriesLoading, setPopularSeriesLoading] = useState(false);
+  const [popularSeries, setPopularSeries] = useState<TVSeries[]>([]);
+
+  async function fetchPopularMovies() {
     try {
-      const data = await api.get(
-        "/discover/movie?include_adult=false&include_video=false&language=pt-BR&page=1&sort_by=popularity.desc&api_key=76a5f475036d4c97e4869703151433c1"
-      );
-      console.log("data", data);
+      setPopularMoviesLoading(true);
+
+      const movies = await movieService.getPopularMovies();
+
+      await sleep(2000);
+
+      setPopularMovies(movies);
     } catch (error) {
-      console.log("errour", error);
+      const errorMessage =
+        error instanceof AppError
+          ? error.message
+          : "Não foi possível buscar os filmes";
+
+      showToast({ type: "error", title: errorMessage });
+    } finally {
+      setPopularMoviesLoading(false);
+    }
+  }
+
+  async function fetchUpComingMovies() {
+    try {
+      setUpComingMoviesLoading(true);
+
+      const movies = await movieService.getUpComingMovies();
+
+      await sleep(2000);
+
+      setUpComingMovies(movies);
+    } catch (error) {
+      const errorMessage =
+        error instanceof AppError
+          ? error.message
+          : "Não foi possível buscar os filmes";
+
+      showToast({ type: "error", title: errorMessage });
+    } finally {
+      setUpComingMoviesLoading(false);
+    }
+  }
+
+  async function fetchPopularSeries() {
+    try {
+      setPopularSeriesLoading(true);
+
+      const series = await movieService.getPopularTVSeries();
+
+      await sleep(2000);
+
+      setPopularSeries(series);
+    } catch (error) {
+      const errorMessage =
+        error instanceof AppError
+          ? error.message
+          : "Não foi possível buscar os filmes";
+
+      showToast({ type: "error", title: errorMessage });
+    } finally {
+      setPopularSeriesLoading(false);
     }
   }
 
   useEffect(() => {
-    fetchPopularFilms();
+    fetchUpComingMovies();
+    fetchPopularMovies();
+    fetchPopularSeries();
   }, []);
 
   return (
@@ -49,9 +116,17 @@ export function Home() {
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.horizontalScroll}
       >
-        {fakeData.map((item) => (
-          <HorizontalFilmCard key={item.toString()} onPress={() => {}} />
-        ))}
+        {upComingMoviesLoading
+          ? fakeData.map((item) => (
+              <View key={item.toString()} style={styles.horizontalShimmer} />
+            ))
+          : upComingMovies.map(({ id, poster_path }) => (
+              <HorizontalFilmCard
+                key={id.toString()}
+                imgPath={poster_path}
+                onPress={() => {}}
+              />
+            ))}
       </ScrollView>
 
       <View style={styles.popularContent}>
@@ -70,9 +145,17 @@ export function Home() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.filmsContainer}
         >
-          {fakeData.map((item) => (
-            <VerticalFilmCard key={item.toString()} onPress={() => {}} />
-          ))}
+          {popularMoviesLoading
+            ? fakeData.map((item) => (
+                <View key={item.toString()} style={styles.popularShimmer} />
+              ))
+            : popularMovies.map(({ id, poster_path }) => (
+                <VerticalFilmCard
+                  imgPath={poster_path}
+                  key={id.toString()}
+                  onPress={() => {}}
+                />
+              ))}
         </ScrollView>
 
         <Text
@@ -87,9 +170,17 @@ export function Home() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.filmsContainer}
         >
-          {fakeData.map((item) => (
-            <VerticalFilmCard key={item.toString()} onPress={() => {}} />
-          ))}
+          {popularSeriesLoading
+            ? fakeData.map((item) => (
+                <View key={item.toString()} style={styles.popularShimmer} />
+              ))
+            : popularSeries.map(({ id, poster_path }) => (
+                <VerticalFilmCard
+                  imgPath={poster_path}
+                  key={id.toString()}
+                  onPress={() => {}}
+                />
+              ))}
         </ScrollView>
       </View>
     </ScrollView>
