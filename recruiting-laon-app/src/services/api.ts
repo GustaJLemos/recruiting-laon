@@ -3,7 +3,7 @@ import { AppError } from "../utils/AppError";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: '',
+  baseURL: "https://api.themoviedb.org/3/",
   timeout: 16000,
 
   timeoutErrorMessage: "Limit time for request has been reach",
