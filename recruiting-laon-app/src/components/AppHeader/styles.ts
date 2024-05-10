@@ -3,7 +3,7 @@ import { ColorTheme } from '../../theme/ColorTheme';
 
 export const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    flex: 1,
 
     paddingVertical: 20,
     paddingHorizontal: 20,
@@ -44,5 +44,5 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     
     borderColor: ColorTheme.gray.gray_400
-  }
+  },
 });
