@@ -6,4 +6,6 @@ export type CommonsTranslations = {
   };
   register: string;
   enter: string;
+  changeLanguage: string;
+  logout: string;
 };

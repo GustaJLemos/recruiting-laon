@@ -8,4 +8,6 @@ export const CommonsEn: CommonsTranslations = {
   },
   register: "Register",
   enter: "Enter",
+  changeLanguage: "Change language to:",
+  logout: "Log out",
 }

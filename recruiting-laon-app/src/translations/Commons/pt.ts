@@ -8,4 +8,6 @@ export const CommonsPt: CommonsTranslations = {
   },
   register: "Cadastrar",
   enter: "Entrar",
+  changeLanguage: "Alterar idioma para:",
+  logout: "Deslogar",
 }
