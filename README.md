@@ -7,8 +7,11 @@ Após a instalação de ambos, clone o repositório na sua máquina.
 use o comando 
 ```js
   cd recruiting-laon-app
+```
 
-  npm start
+Após entrar na pasta certa execute o comando:
+```js
+  npm install
 ```
 
 após a instalação dos pacotes com o NPM, basta executar o comando:
