@@ -22,7 +22,7 @@ api.interceptors.request.use(
     
     if (config.headers && access_token) {
       // Aq iria o acessToken de cada user, como estou usando API do TMDB gerei um token pro meu usuário, e deixei fixo para facilitar.
-      config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3NmE1ZjQ3NTAzNmQ0Yzk3ZTQ4Njk3MDMxNTE0MzNjMSIsInN1YiI6IjY2M2Q2Njk4OTE0ZDU3Mzk3OGEzZTM0MiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8arZslJCIjdWKNefP-RRgz9P78w949DMhg2pWzXsYg8`;
+      config.headers.Authorization = ``;
     }
         
     config.url = config?.url + `?language=${userPreferedLanguage === "pt" ? "pt-BR" : "en-US"}`;
